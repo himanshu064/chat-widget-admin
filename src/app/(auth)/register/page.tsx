@@ -1,6 +1,7 @@
+import LoadingButton from "@/components/@preline/LoadingButton";
 import React from "react";
 
-const SignupPage = () => {
+const RegisterPage = () => {
   return (
     <div className="mt-7 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700">
       <div className="p-4 sm:p-7">
@@ -173,12 +174,12 @@ const SignupPage = () => {
               </div>
               {/* <!-- End Checkbox --> */}
 
-              <button
+              <LoadingButton
                 type="submit"
                 className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
               >
                 Sign up
-              </button>
+              </LoadingButton>
             </div>
           </form>
           {/* <!-- End Form --> */}
@@ -188,4 +189,4 @@ const SignupPage = () => {
   );
 };
 
-export default SignupPage;
+export default RegisterPage;
