@@ -1,8 +1,13 @@
 import type { NextAuthConfig, User } from "next-auth";
-import NextAuth from "next-auth";
+import NextAuth, { CredentialsSignin } from "next-auth";
 import { parse as parseCookie } from "cookie";
 import CredentialsProvider from "next-auth/providers/credentials";
 import axios from "@/lib/axios";
+
+export class InvalidLoginError extends CredentialsSignin {
+  code = "InvalidLoginError";
+  message = "Invalid login credentials";
+}
 
 interface AuthUser extends User {
   access_token?: string;
@@ -14,7 +19,7 @@ const authOptions: NextAuthConfig = {
     signIn: "/login",
     newUser: "/register",
     signOut: "/logout",
-    error: "/auth/error",
+    error: "/login",
   },
   providers: [
     CredentialsProvider({
@@ -51,14 +56,17 @@ const authOptions: NextAuthConfig = {
 
           return payload;
         } catch (error) {
-          throw new Error("Invalid credentials");
+          throw new InvalidLoginError();
         }
       },
     }),
   ],
   session: { strategy: "jwt" },
   callbacks: {
-    async signIn({ account }) {
+    async signIn({ account, user }) {
+      if (!user) {
+        return false;
+      }
       // Add your signIn logic here if needed
       if (account?.provider === "google" || account?.provider === "credentials") {
         return true;
@@ -85,3 +93,18 @@ const authOptions: NextAuthConfig = {
 };
 
 export const { handlers, auth, signIn, signOut } = NextAuth(authOptions);
+
+/**
+ * Retrieves the current user from the authentication session.
+ *
+ * @return {Promise<User | undefined>} The current user if available, otherwise undefined.
+ */
+export const currentUser = async () => {
+  const session = await auth();
+  return session?.user;
+};
+
+export const currentSession = async () => {
+  const session = await auth();
+  return session;
+};

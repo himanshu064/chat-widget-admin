@@ -1,7 +1,11 @@
-import React from "react";
-import LoadingButton from "@/components/@preline/LoadingButton";
-import { signIn } from "@/auth";
+import React, { Suspense } from "react";
+import { redirect } from "next/navigation";
+import { isRedirectError } from "next/dist/client/components/redirect";
+import { InvalidLoginError, signIn } from "@/auth";
 import { DEFAULT_REDIRECT } from "@/lib/routes";
+import SubmitButton from "@/components/form/SubmitButton";
+import LoginForm from "@/containers/login/LoginForm";
+// import { toast } from "sonner";
 
 const LoginPage = () => {
   return (
@@ -54,19 +58,33 @@ const LoginPage = () => {
           <form
             action={async (formData) => {
               "use server";
-              const email = formData.get("email");
-              const password = formData.get("password");
-              await signIn("credentials", {
-                email,
-                password,
-                redirect: true,
-                redirectTo: DEFAULT_REDIRECT,
-              });
+              try {
+                const email = formData.get("email");
+                const password = formData.get("password");
+                await signIn("credentials", {
+                  email,
+                  password,
+                  redirect: true,
+                  redirectTo: DEFAULT_REDIRECT,
+                });
+              } catch (error) {
+                // #REF: https://github.com/nextauthjs/next-auth/discussions/9389#discussioncomment-10362651
+                if (isRedirectError(error)) throw error;
+                // if (error instanceof InvalidLoginError) {
+                //   toast.error("Invalid email or password");
+                // }
+                if (error instanceof InvalidLoginError) {
+                  redirect(`/login?error=${error.code}&message=${error.message}`);
+                }
+              }
             }}
           >
             <div className="grid gap-y-4">
-              {/* <!-- Form Group --> */}
-              <div>
+              {/* <!-- Form --> */}
+              <Suspense fallback={null}>
+                <LoginForm />
+              </Suspense>
+              {/* <div>
                 <label htmlFor="email" className="block text-sm mb-2 dark:text-white">
                   Email address
                 </label>
@@ -96,9 +114,7 @@ const LoginPage = () => {
                   Please include a valid email address so we can get back to you
                 </p>
               </div>
-              {/* <!-- End Form Group --> */}
 
-              {/* <!-- Form Group --> */}
               <div>
                 <div className="flex justify-between items-center">
                   <label htmlFor="password" className="block text-sm mb-2 dark:text-white">
@@ -137,9 +153,7 @@ const LoginPage = () => {
                   8+ characters required
                 </p>
               </div>
-              {/* <!-- End Form Group --> */}
 
-              {/* <!-- Checkbox --> */}
               <div className="flex items-center">
                 <div className="flex">
                   <input
@@ -154,15 +168,9 @@ const LoginPage = () => {
                     Remember me
                   </label>
                 </div>
-              </div>
-              {/* <!-- End Checkbox --> */}
+              </div> */}
 
-              <LoadingButton
-                type="submit"
-                className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-              >
-                Sign in
-              </LoadingButton>
+              <SubmitButton className="w-full">Sign in</SubmitButton>
             </div>
           </form>
           {/* <!-- End Form --> */}

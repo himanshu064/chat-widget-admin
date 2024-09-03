@@ -1,4 +1,5 @@
 import { signOut } from "@/auth";
+import SubmitButton from "@/components/form/SubmitButton";
 import { getServerSession } from "@/lib/next-auth";
 import { ROOT } from "@/lib/routes";
 import React from "react";
@@ -18,7 +19,8 @@ const Dashboard = async () => {
           });
         }}
       >
-        <button type="submit">Sign Out</button>
+        {/* <button type="submit">Sign Out</button> */}
+        <SubmitButton>Sign Out</SubmitButton>
       </form>
     </div>
   );

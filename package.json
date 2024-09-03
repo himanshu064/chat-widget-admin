@@ -29,6 +29,7 @@
     "preline": "^2.4.1",
     "react": "^18",
     "react-dom": "^18",
+    "sonner": "^1.5.0",
     "tailwind-merge": "^2.5.2"
   },
   "devDependencies": {
