@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "title": "Responsive",
+    "description": "Responsive, mobile-first design, so your site will look great on any device."
+  },
+  {
+    "id": 2,
+    "title": "Integration",
+    "description": "Integrated with a separete node server, so you can easily access the data. Authentication is done using JWT tokens."
+  },
+  {
+    "id": 3,
+    "title": "HTTP Cookies Only",
+    "description": "Frontend and backend integration is done using HTTP cookies only. No need to store tokens in local storage."
+  },
+  {
+    "id": 4,
+    "title": "Refresh Token",
+    "description": "Example of using refresh tokens to get a new access token when it expires is included."
+  }
+]
