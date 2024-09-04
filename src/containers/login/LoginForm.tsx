@@ -10,20 +10,14 @@ const LoginForm = () => {
   const isError = (sp.get("error") || "") !== "";
   const errorMessage = sp.get("message") || "";
 
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-
-  const [emailError, setEmailError] = React.useState(isError);
-  const [passwordError, setPasswordError] = React.useState(isError);
-
   return (
     <>
-      {(emailError || passwordError) && <Alert title="Error" description={errorMessage} />}
+      {isError && <Alert title="Error" description={errorMessage} />}
       <div>
         <label
           htmlFor="email"
           className={cn("block text-sm mb-2 dark:text-white", {
-            "text-red-500": emailError,
+            "text-red-500": isError,
           })}
         >
           Email address
@@ -36,13 +30,11 @@ const LoginForm = () => {
             className={cn(
               "py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600",
               {
-                "border-red-500 focus:border-red-500": emailError,
+                "border-red-500 focus:border-red-500": isError,
               },
             )}
             required
             aria-describedby="email-error"
-            onChange={(e) => setEmail(e.target.value)}
-            onBlur={() => setEmailError(email.length === 0)}
           />
           <div className="hidden absolute inset-y-0 end-0 pointer-events-none pe-3">
             <svg
@@ -67,7 +59,7 @@ const LoginForm = () => {
           <label
             htmlFor="password"
             className={cn("block text-sm mb-2 dark:text-white", {
-              "text-red-500": passwordError,
+              "text-red-500": isError,
             })}
           >
             Password
@@ -87,13 +79,11 @@ const LoginForm = () => {
             className={cn(
               "py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600",
               {
-                "border-red-500 focus:border-red-500": passwordError,
+                "border-red-500 focus:border-red-500": isError,
               },
             )}
             required
             aria-describedby="password-error"
-            onChange={(e) => setPassword(e.target.value)}
-            onBlur={() => setPasswordError(password.length === 0)}
           />
           <div className="hidden absolute inset-y-0 end-0 pointer-events-none pe-3">
             <svg
